@@ -192,7 +192,7 @@ libraries are npm packages, so there is no `forge install` step.
 
 ```bash
 npm install
-npm test                      # see: "31 tests passed, 0 failed" (Foundry) and "# pass 6" (protocol vectors)
+npm run test:contracts && npm test   # see: "31 tests passed, 0 failed" (Foundry) and "# pass 6" (protocol vectors)
 ```
 
 **2. The live Aurora testnet deployment, read-only, no keys needed.**

@@ -6,7 +6,7 @@
     "apps/*"
   ],
   "scripts": {
-    "test": "npm run test:contracts && npm run test:protocol",
+    "test": "npm run test:protocol",
     "test:contracts": "cd contracts && forge test",
     "test:protocol": "npm -w @maskbid/protocol test",
     "build:contracts": "cd contracts && forge build",
