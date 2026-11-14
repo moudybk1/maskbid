@@ -4,7 +4,7 @@ import { head, put } from "@vercel/blob";
 
 /** Frozen metadata, keyed by the SHA-256 of its bytes. On Vercel (BLOB_READ_WRITE_TOKEN set) it lives in the project's Blob store,
     because the function filesystem is read-only; anywhere else it is a file under apps/web/data/metadata. Server only. */
-const DIR = join(process.cwd(), "data", "metadata");
+const DIR = process.env.METADATA_DIR ?? join(process.cwd(), "data", "metadata"); // the VPS image points this at a mounted volume
 const blob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 const path = (hash: string) => `metadata/${hash}.json`;
 

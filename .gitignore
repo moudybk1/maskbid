@@ -25,3 +25,4 @@ apps/*/dist/
 *.tsbuildinfo
 .vercel
 .env*
+!deploy/.env.example

@@ -1,0 +1,16 @@
+**/node_modules
+**/.next
+**/.next-*
+.git
+.backup
+.vercel
+.env*
+contracts/target
+contracts/out
+contracts/cache
+contracts/lib
+contracts/dist
+release
+apps/web/data
+apps/web/.taste-skill
+**/*.tsbuildinfo
