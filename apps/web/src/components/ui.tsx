@@ -125,13 +125,17 @@ export function AmountInput({ id, value, onChange, error, help, label, disabled 
 
 export function Modal({ title, onClose, children, closable = true, wide }: { title: string; onClose: () => void; children: ReactNode; closable?: boolean; wide?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
+  // Callers pass a new onClose on every render (and pages poll the chain every few seconds): keep the latest in a ref so the
+  // effect below runs once per open. Re-running it would pull focus back to the first control while someone is mid-form.
+  const close = useRef(onClose);
+  close.current = onClose;
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
     (ref.current?.querySelector<HTMLElement>("input,select,textarea") ?? ref.current?.querySelector<HTMLElement>("button:not([aria-label='Close dialog'])"))?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && closable) onClose(); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && closable) close.current(); };
     document.addEventListener("keydown", onKey);
     return () => { document.removeEventListener("keydown", onKey); prev?.focus(); };
-  }, [onClose, closable]);
+  }, [closable]);
   // Portal: an ancestor with a transform (the header's entrance animation) would otherwise trap position: fixed.
   return createPortal(
     <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget && closable) onClose(); }}>
@@ -151,7 +155,7 @@ export function TxStatus({ state }: { state: TxState }) {
   if (state.status === "success") return <Alert tone="success" title={`${state.label ?? "Transaction"} confirmed`}>Receipt: {state.hash && <TxLink hash={state.hash} />}</Alert>;
   return (
     <Alert tone="info" title={state.status === "signing" ? `Signing: ${state.label}` : `Confirming: ${state.label}`}>
-      {state.hash ? <>Broadcast: <TxLink hash={state.hash} /> — closing this page does not cancel the transaction.</> : "Signing with this account's key in the browser."}
+      {state.hash ? <>Broadcast: <TxLink hash={state.hash} /> — closing this page does not cancel the transaction.</> : "Waiting for the signature."}
     </Alert>
   );
 }

@@ -43,7 +43,8 @@ export function BidDialog({ view, claimWindow, onClose, onRecorded }: { view: Au
   const submit = async () => {
     if (!client || !address || amount === undefined) return;
     setStep("progress"); setError(undefined);
-    const mark = (s: Stage, st: "done" | "active" | "error") => { setStage(s); setStageState((p) => ({ ...p, [s]: st })); };
+    let current: Stage = "encrypt"; // the stage the error belongs to: state would be stale inside this closure
+    const mark = (s: Stage, st: "done" | "active" | "error") => { current = s; setStage(s); setStageState((p) => ({ ...p, [s]: st })); };
     try {
       mark("encrypt", "active");
       const [fresh, cfg, bidder] = await Promise.all([readAuction(view.id), readConfig(), addressOf(address)]); // never bid on stale state
@@ -64,7 +65,7 @@ export function BidDialog({ view, claimWindow, onClose, onRecorded }: { view: Au
       setStep("done");
       onRecorded();
     } catch (e) {
-      setStageState((p) => ({ ...p, [stage]: "error" }));
+      setStageState((p) => ({ ...p, [current]: "error" }));
       setError(describeError(e));
     }
   };
