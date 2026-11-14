@@ -1,10 +1,8 @@
 import { createHash } from "node:crypto";
-import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 import { NextResponse } from "next/server";
+import { saveMetadata } from "@/lib/metadata-store";
 
 const CATEGORIES = new Set(["watch", "art", "digital_collectible", "other"]);
-const DIR = join(process.cwd(), "data", "metadata");
 const problem = (status: number, code: string, detail: string) => NextResponse.json({ type: `urn:maskbid:error:${code.toLowerCase().replace(/_/g, "-")}`, title: detail, status, code, detail }, { status });
 
 /** Freeze public metadata v1 (spec 15 §13): canonical UTF-8 JSON, NFC text, SHA-256 of raw bytes, content-addressed. */
@@ -26,8 +24,7 @@ export async function POST(req: Request) {
   const canonical = JSON.stringify({ schemaVersion: 1, title, description, category, condition, isDemo: Boolean(b.isDemo), issuerWallet, images });
   const bytes = Buffer.from(canonical, "utf8");
   const hash = createHash("sha256").update(bytes).digest("hex");
-  mkdirSync(DIR, { recursive: true });
-  writeFileSync(join(DIR, `${hash}.json`), bytes);
+  try { await saveMetadata(hash, bytes); } catch { return problem(503, "STORAGE_UNAVAILABLE", "Could not store the metadata"); }
   const origin = process.env.APP_ORIGIN ?? new URL(req.url).origin;
   return NextResponse.json({ uri: `${origin}/api/metadata/${hash}`, metadataHash: `0x${hash}` });
 }

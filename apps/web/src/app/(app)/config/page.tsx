@@ -1,7 +1,7 @@
 "use client";
 import { AddressLink, Alert, HashRow } from "@/components/ui";
 import { readConfig } from "@/lib/client";
-import { NETWORK, RPC_URL } from "@/lib/config";
+import { NETWORK } from "@/lib/config";
 import { useChainData } from "@/lib/data";
 import { fmtDuration, formatNear } from "@/lib/format";
 
@@ -13,7 +13,7 @@ export default function ConfigPage() {
       {error && <Alert tone="error">{error}</Alert>}
       {cfg && (
         <section className="panel">
-          <HashRow label="Network" source="env"><span className="mono">{NETWORK} · {RPC_URL}</span></HashRow>
+          <HashRow label="Network" source="env"><span className="mono">{NETWORK} · private QuickNode RPC</span></HashRow>
           <HashRow label="Profile" source="contract"><span>{cfg.profile}</span></HashRow>
           <HashRow label="MaskBid contract (registry, assets, auctions)" source="contract"><AddressLink address={cfg.contract} /></HashRow>
           <HashRow label="Protocol address and domain number" source="contract"><span className="mono">{cfg.contractAddress} · {cfg.chainId.toString()}</span></HashRow>

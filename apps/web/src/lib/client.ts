@@ -119,8 +119,11 @@ export function fetchMetadata(uri: string, expectedHash: Hex): Promise<MetadataR
 }
 async function loadMetadata(uri: string, expectedHash: Hex): Promise<MetadataResult> {
   if (!/^https?:\/\//.test(uri)) return { integrity: "unavailable" }; // only web URIs can be fetched here
+  // Lots registered while the app ran elsewhere (localhost) carry that host in the on-chain URI. The path is content-addressed and
+  // the bytes are checked against the on-chain hash below, so any origin serving them is as good: ask this one.
+  const own = /\/api\/metadata\/([0-9a-f]{64})$/.exec(uri);
   try {
-    const res = await fetch(uri, { cache: "force-cache" });
+    const res = await fetch(own ? `/api/metadata/${own[1]}` : uri, { cache: "force-cache" });
     if (!res.ok) return { integrity: "unavailable" };
     const bytes = new Uint8Array(await res.arrayBuffer());
     const digest = `0x${[...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))].map((b) => b.toString(16).padStart(2, "0")).join("")}`;

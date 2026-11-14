@@ -3,7 +3,6 @@
 import { ed25519 } from "@noble/curves/ed25519";
 import { sha256 } from "@noble/hashes/sha256";
 import { base58 } from "@scure/base";
-import { RPC_URL } from "./config";
 
 export class NearError extends Error {
   /** `panic` is the contract's error name ("NotEligible") when a contract refused the call. */
@@ -13,27 +12,18 @@ export class NearError extends Error {
   }
 }
 
-/** The configured endpoint, then public fallbacks: a rate-limited or unreachable node moves the request to the next one. */
-const ENDPOINTS = [...new Set([RPC_URL, "https://rpc.testnet.fastnear.com", "https://near-testnet.drpc.org", "https://test.rpc.fastnear.com"])];
-let preferred = 0;
-
+/** All chain access goes through our own /api/rpc, which holds the private QuickNode URL. No public nodes. */
 async function rpc<T>(method: string, params: unknown): Promise<T> {
-  let last: unknown;
-  for (let i = 0; i < ENDPOINTS.length; i++) {
-    const at = (preferred + i) % ENDPOINTS.length;
-    try {
-      const res = await fetch(ENDPOINTS[at], { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }), cache: "no-store" });
-      if (res.status === 429 || res.status >= 500) throw new Error(`RPC ${res.status}`);
-      const j = await res.json();
-      preferred = at;
-      if (j.error) throw new NearError(typeof j.error.data === "string" ? j.error.data : j.error.cause?.name ?? j.error.message ?? "RPC error");
-      return j.result as T;
-    } catch (e) {
-      if (e instanceof NearError) throw e; // the node answered; another node would say the same
-      last = e;
-    }
+  let j;
+  try {
+    const res = await fetch("/api/rpc", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }), cache: "no-store" });
+    if (!res.ok) throw new Error(`RPC ${res.status}`);
+    j = await res.json();
+  } catch (e) {
+    throw new NearError(`NEAR RPC unreachable (${(e as Error)?.message ?? "no answer"})`);
   }
-  throw new NearError(`NEAR RPC unreachable (${(last as Error)?.message ?? "no answer"})`);
+  if (j.error) throw new NearError(typeof j.error.data === "string" ? j.error.data : j.error.cause?.name ?? j.error.message ?? "RPC error");
+  return j.result as T;
 }
 
 const utf8 = (s: string) => new TextEncoder().encode(s);
