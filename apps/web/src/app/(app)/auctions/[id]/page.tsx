@@ -1,7 +1,8 @@
 "use client";
 import { useParams } from "next/navigation";
 import { ActionPanel } from "@/components/ActionPanel";
-import { AssetArt, Dots } from "@/components/Dots";
+import { Dots } from "@/components/Dots";
+import { demoPhoto } from "@/lib/demo-photos";
 import { AddressLink, Alert, Badge, HashRow, SyncLine } from "@/components/ui";
 import { COPY } from "@/lib/copy";
 import { loadAuction, loadBids, useChainData } from "@/lib/data";
@@ -36,8 +37,8 @@ export default function AuctionDetail() {
           <figure className="lot-media" style={{ margin: 0 }}>
             {metadata?.images?.[0] ? <img src={metadata.images[0]} alt={title} /> : (
               <>
-                <AssetArt seed={asset.metadataHash} category={metadata?.category} large />
-                <figcaption>No pictures registered · drawn from its category and hash {short(asset.metadataHash)}</figcaption>
+                <img src={demoPhoto(metadata?.category).src} alt="" />
+                <figcaption>No pictures registered · illustrative photo: <a href={demoPhoto(metadata?.category).href} target="_blank" rel="noreferrer">{demoPhoto(metadata?.category).credit}</a></figcaption>
               </>
             )}
           </figure>
