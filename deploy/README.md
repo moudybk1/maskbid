@@ -8,7 +8,7 @@ One server, two containers: the Next.js app and Caddy (HTTPS certificate include
 On a fresh server, as root (web console is fine), with your private QuickNode testnet URL:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/moudybk1/maskbid-aurora/main/deploy/bootstrap.sh | NEAR_RPC_URL='https://...' bash
+curl -fsSL https://raw.githubusercontent.com/moudybk1/maskbid/main/deploy/bootstrap.sh | NEAR_RPC_URL='https://...' bash
 ```
 
 It installs Docker, opens the firewall, clones the repo to `/opt/maskbid` and starts everything on plain HTTP at the server's IP. Once you have a
@@ -34,7 +34,7 @@ At your registrar create an **A record** `maskbid.<yourdomain>` (or the bare dom
 ## 3. First deploy
 
 ```bash
-git clone https://github.com/moudybk1/maskbid-aurora.git && cd maskbid-aurora/deploy
+git clone https://github.com/moudybk1/maskbid.git && cd maskbid/deploy
 cp .env.example .env && nano .env      # DOMAIN, APP_ORIGIN (https://<domain>), NEAR_RPC_URL (QuickNode, testnet)
 docker compose up -d --build
 ```
@@ -44,7 +44,7 @@ Open `https://<domain>`. First start copies the 7 existing lots' metadata (`apps
 ## Update
 
 ```bash
-cd maskbid-aurora && git pull && cd deploy && docker compose up -d --build
+cd maskbid && git pull && cd deploy && docker compose up -d --build
 ```
 
 ## Operate

@@ -5,7 +5,7 @@
 set -euo pipefail
 : "${NEAR_RPC_URL:?set NEAR_RPC_URL to the private QuickNode testnet endpoint}"
 DOMAIN="${DOMAIN:-:80}"
-REPO=https://github.com/moudybk1/maskbid-aurora.git
+REPO=https://github.com/moudybk1/maskbid.git
 DIR=/opt/maskbid
 
 if [ -n "${SSH_PUBKEY:-}" ]; then
