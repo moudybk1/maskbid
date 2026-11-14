@@ -99,7 +99,10 @@ Not run on testnet: the no-sale and winner-default paths (unit-tested only), and
 The same flow was also driven through the web app against v1: register an asset, approve it as the verifier, request
 the key (the first TEE run timed out, the retry button recovered it), publish the auction, place two sealed bids from
 two accounts (each checked against the commitment the contract stored), request settlement, and pay and claim as the
-winner. On v2 a wallet session through NEAR Connect (the NEAR CLI wallet) registered itself as a participant.
+winner. On v2 a wallet session through NEAR Connect (the NEAR CLI wallet) registered itself as a participant, and lot 2
+ran end to end in the web app with the demo accounts: two sealed bids (140 and 125 mUSDC), settlement requested from the
+page (attempt 1 timed out, the retry button's attempt 2 was accepted), the loser withdrew before the winner paid, the
+winner paid 130 mUSDC and received the unit, and the contract was left with no locked deposits, credits or tokens.
 
 ## Try it
 
