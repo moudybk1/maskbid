@@ -4,7 +4,6 @@ import "./globals.css";
 import { WalletProvider } from "@/lib/wallet";
 import { NETWORK } from "@/lib/config";
 import { FooterWord } from "@/components/FooterWord";
-import { BrandMark } from "@/components/Dots";
 import { SkyDefs } from "@/components/Sky";
 import { Stipple } from "@/components/Stipple";
 
@@ -15,6 +14,7 @@ const body = Spectral({ subsets: ["latin"], weight: ["400", "500", "600"], style
 export const metadata: Metadata = {
   title: "MaskBid — Private bids. Clear outcomes.",
   description: "Sealed-bid auctions for verified assets with deposits and settlement on NEAR.",
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="footer-panel">
               <div className="footer-top">
                 <div className="footer-intro">
-                  <a className="brand" href="/"><BrandMark />MaskBid</a>
+                  <a className="brand" href="/"><img src="/brand/maskbid-logo.svg" alt="MaskBid" /></a>
                   <p>Sealed-bid auctions for verified assets. Private bids, clear outcomes, settled on NEAR.</p>
                   <a className="btn btn-sm" href="/auctions">Launch app</a>
                 </div>

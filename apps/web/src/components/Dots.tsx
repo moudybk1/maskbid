@@ -38,12 +38,3 @@ export function AssetArt({ seed, category }: { seed: string; category?: string; 
   const n = parseInt(seed.replace(/^0x/, "").slice(0, 8).padEnd(8, "0"), 16) || 1;
   return <div className="art" aria-hidden="true"><Stipple kind={OBJECT[category ?? ""] ?? "scene"} seed={n} /></div>;
 }
-
-export function BrandMark() {
-  return (
-    <svg viewBox="0 0 26 26" aria-hidden="true">
-      <circle cx="13" cy="13" r="10.5" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M13 2.5a10.5 10.5 0 0 1 0 21z" fill="var(--accent)" />
-    </svg>
-  );
-}

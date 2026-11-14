@@ -73,7 +73,7 @@ main.container h1 + p.muted, main.container h1 + .muted, main.container h1 ~ p.m
   to { max-width: 960px; margin-top: 10px; min-height: 54px; padding-left: 18px; padding-right: 8px; border-radius: 12px; background: rgba(251, 250, 243, .84); box-shadow: 0 8px 28px rgba(39, 52, 74, .1), inset 0 0 0 1px var(--line); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 }
 .brand { display: inline-flex; align-items: center; gap: 8px; font: 500 19px/1 var(--font-ui); letter-spacing: -0.03em; color: var(--ink); text-decoration: none; }
-.brand svg { width: 20px; height: 20px; }
+.brand img { display: block; height: 26px; width: auto; }
 .nav { display: flex; gap: 2px; align-items: center; }
 .nav a { display: inline-flex; align-items: center; min-height: 32px; padding: 0 10px; border-radius: 7px; color: var(--ink); text-decoration: none; font: 500 14px var(--font-ui); transition: background-color .2s; }
 .nav a:hover { color: var(--ink); background: rgba(39, 52, 74, .07); }

@@ -1,4 +1,3 @@
-import { BrandMark } from "@/components/Dots";
 import { ModeGate } from "@/components/ModeGate";
 import { Nav } from "@/components/Nav";
 import { WalletControl } from "@/components/WalletControl";
@@ -9,7 +8,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <header className="header">
         <div className="container header-in">
-          <a className="brand" href="/"><BrandMark />MaskBid</a>
+          <a className="brand" href="/"><img src="/brand/maskbid-logo.svg" alt="MaskBid" /></a>
           <Nav />
           <div className="header-right"><ModeGate /><WalletControl /></div>
         </div>

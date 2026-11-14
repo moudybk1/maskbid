@@ -1,6 +1,5 @@
 "use client";
 import { formatUnits6 } from "@maskbid/protocol";
-import { BrandMark } from "@/components/Dots";
 import { FlowStory } from "@/components/FlowStory";
 import { Arrow, Hero } from "@/components/Hero";
 import { PartsAccordion } from "@/components/PartsAccordion";
@@ -34,7 +33,7 @@ export default function Home() {
     <>
       <header className="header">
         <div className="container header-in">
-          <a className="brand" href="/"><BrandMark />MaskBid</a>
+          <a className="brand" href="/"><img src="/brand/maskbid-logo.svg" alt="MaskBid" /></a>
           <nav className="nav" aria-label="Sections">{LINKS.map(([href, text]) => <a key={href} href={href}>{text}</a>)}</nav>
           <div className="header-right"><a className="btn btn-outline btn-sm" href="/auctions">Launch app <Arrow /></a></div>
         </div>
