@@ -3,6 +3,19 @@
 One server, two containers: the Next.js app and Caddy (HTTPS certificate included). Nothing else is needed: chain access goes through
 `/api/rpc` to your QuickNode endpoint, and lot metadata lives in a Docker volume.
 
+## Fastest path: one command
+
+On a fresh server, as root (web console is fine), with your private QuickNode testnet URL:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/moudybk1/maskbid-aurora/main/deploy/bootstrap.sh | NEAR_RPC_URL='https://...' bash
+```
+
+It installs Docker, opens the firewall, clones the repo to `/opt/maskbid` and starts everything on plain HTTP at the server's IP. Once you have a
+domain and its A record points to the server, run it again with `DOMAIN=<domain>` in front of `bash` and it switches to HTTPS.
+
+The manual steps follow.
+
 ## 1. Server
 
 - Ubuntu 24.04, **2 GB RAM** or more (the image build needs it; with 1 GB add 2 GB of swap first), 1 vCPU, 20 GB disk.
