@@ -23,3 +23,5 @@ apps/*/dist/
 .backup/
 .DS_Store
 *.tsbuildinfo
+.vercel
+.env*
