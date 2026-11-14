@@ -170,7 +170,7 @@ npm run near:testnet                     # one full auction against the deployme
   `num-bigint-dig`, `rand_chacha`, `zeroize`, `serde`.
 - TypeScript: Next.js 16, React 19, [NEAR Connect](https://github.com/hot-dao/near-selector), `viem` (hashing), Node's
   built-in test runner and Web Crypto.
-- Services: NEAR testnet, [OutLayer](https://outlayer.fastnear.com) testnet (TEE runs), FastFS (solver wasm hosting), Vercel.
+- Services: NEAR testnet, OutLayer testnet (`outlayer.testnet`) (TEE runs), FastFS (solver wasm hosting), Vercel.
 
 ## Credits and license
 
