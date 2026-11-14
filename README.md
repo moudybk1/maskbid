@@ -63,8 +63,8 @@ The fastest way is the hosted demo: **https://maskbid.vercel.app** (NEAR testnet
 
 ```bash
 npm install
-npm test             # protocol vectors, no other tooling needed
-npm run web          # http://localhost:3000, reads and writes the testnet deployment
+npm test             # see: "# pass 6", "# fail 0" (protocol vectors, no other tooling needed)
+npm run web          # see: http://localhost:3000 listing the lots on NEAR testnet; reads and writes maskbid-v2.testnet
 ```
 
 The web app needs no configuration. **Connect account** opens [NEAR Connect](https://github.com/hot-dao/near-selector),
@@ -81,7 +81,7 @@ transaction; the app never sees a key. Then:
 Contract work needs Rust with the `wasm32-unknown-unknown` target:
 
 ```bash
-npm run test:near    # 9 tests
+npm run test:near    # see: "test result: ok. 8 passed" and "1 passed" (maskbid, mock-usdc)
 npm run build:near   # contracts/dist/maskbid.wasm and mock_usdc.wasm
 npm run near:testnet # one full auction against the testnet deployment (about ten minutes)
 ```
@@ -163,6 +163,14 @@ npm run near:testnet                     # one full auction against the deployme
 - **Privacy scope.** Bid amounts are hidden; accounts, deposits and timing stay public.
 - **No indexer.** Pages read contract views through public RPC nodes, which rate-limit (the hosted demo uses a private
   proxy).
+
+## Libraries and services
+
+- Rust: `near-sdk` 5, `near-contract-standards`; the solver (`wasm32-wasip2`) uses `rsa`, `aes-gcm`, `sha2`, `sha3`,
+  `num-bigint-dig`, `rand_chacha`, `zeroize`, `serde`.
+- TypeScript: Next.js 16, React 19, [NEAR Connect](https://github.com/hot-dao/near-selector), `viem` (hashing), Node's
+  built-in test runner and Web Crypto.
+- Services: NEAR testnet, [OutLayer](https://outlayer.fastnear.com) testnet (TEE runs), FastFS (solver wasm hosting), Vercel.
 
 ## Credits and license
 
