@@ -14,6 +14,10 @@ curl -fsSL https://raw.githubusercontent.com/moudybk1/maskbid-aurora/main/deploy
 It installs Docker, opens the firewall, clones the repo to `/opt/maskbid` and starts everything on plain HTTP at the server's IP. Once you have a
 domain and its A record points to the server, run it again with `DOMAIN=<domain>` in front of `bash` and it switches to HTTPS.
 
+If ports 80/443 are already used by another site on the server, the script leaves them alone and serves the app on
+`http://<ip>:8080` instead (no Caddy of ours). To put it on a domain there, add a `reverse_proxy 127.0.0.1:8080` block for that domain
+to the existing proxy.
+
 The manual steps follow.
 
 ## 1. Server

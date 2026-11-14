@@ -3,8 +3,11 @@ services:
     build: { context: .., dockerfile: deploy/Dockerfile }
     restart: unless-stopped
     env_file: .env
+    # Behind our own Caddy the app stays on localhost; WEB_PUBLISH=8080 exposes it directly when ports 80/443 belong to something else.
+    ports: ["${WEB_PUBLISH:-127.0.0.1:3000}:3000"]
     volumes: [metadata:/data/metadata]
   caddy:
+    profiles: [proxy] # COMPOSE_PROFILES=proxy in .env turns it on; bootstrap.sh does that only when 80/443 are free
     image: caddy:2
     restart: unless-stopped
     ports: ["80:80", "443:443", "443:443/udp"]

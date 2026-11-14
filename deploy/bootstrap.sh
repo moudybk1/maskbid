@@ -22,17 +22,26 @@ fi
 
 command -v git >/dev/null || { apt-get update -y && apt-get install -y git curl; }
 command -v docker >/dev/null || curl -fsSL https://get.docker.com | sh
+# Ports 80/443 may already belong to another site on this server (its own Caddy/nginx): then leave them alone and publish the app on 8080.
+if docker ps --format '{{.Names}}' | grep -q '^deploy-caddy'; then PROXY=1 # our own proxy from an earlier run
+elif ss -ltn | grep -qE ':(80|443) '; then PROXY=0; else PROXY=1; fi
 if command -v ufw >/dev/null && ufw status | grep -q "Status: active"; then
-  ufw allow 22/tcp && ufw allow 80/tcp && ufw allow 443/tcp && ufw allow 443/udp
+  ufw allow 22/tcp
+  if [ "$PROXY" = 1 ]; then ufw allow 80/tcp && ufw allow 443/tcp && ufw allow 443/udp; else ufw allow 8080/tcp; fi
 fi
 
 if [ -d "$DIR/.git" ]; then git -C "$DIR" pull --ff-only; else git clone "$REPO" "$DIR"; fi
 cd "$DIR/deploy"
 
 IP="$(hostname -I | awk '{print $1}')"
-if [ "$DOMAIN" = ":80" ]; then ORIGIN="http://$IP"; else ORIGIN="https://$DOMAIN"; fi
 umask 077
-printf 'DOMAIN=%s\nAPP_ORIGIN=%s\nNEAR_RPC_URL=%s\n' "$DOMAIN" "$ORIGIN" "$NEAR_RPC_URL" > .env
+if [ "$PROXY" = 0 ]; then
+  ORIGIN="http://$IP:8080"
+  printf 'DOMAIN=%s\nAPP_ORIGIN=%s\nNEAR_RPC_URL=%s\nWEB_PUBLISH=8080\n' "$DOMAIN" "$ORIGIN" "$NEAR_RPC_URL" > .env
+else
+  if [ "$DOMAIN" = ":80" ]; then ORIGIN="http://$IP"; else ORIGIN="https://$DOMAIN"; fi
+  printf 'DOMAIN=%s\nAPP_ORIGIN=%s\nNEAR_RPC_URL=%s\nCOMPOSE_PROFILES=proxy\n' "$DOMAIN" "$ORIGIN" "$NEAR_RPC_URL" > .env
+fi
 
 docker compose up -d --build
 echo "Done: $ORIGIN"
